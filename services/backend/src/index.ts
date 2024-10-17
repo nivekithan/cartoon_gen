@@ -8,6 +8,7 @@ import { FileOutput } from "replicate";
 import { cors } from "hono/cors";
 import { getDb } from "./db/getDb";
 import { imageTable } from "./db/schema";
+import { desc } from "drizzle-orm";
 
 const GenerateSchema = z.object({
 	prompt: z.string().trim().min(1),
@@ -81,6 +82,12 @@ export const app = new Hono<{ Bindings: Env }>()
 		console.log(`Saved the key to the database`, { key });
 
 		return c.json({ data: url, debug: { imagePrompt } });
+	})
+	.get("/images", async (c) => {
+		const db = getDb(c.env.DB);
+		const allImages = await db.select().from(imageTable).orderBy(desc(imageTable.createdAt));
+
+		return c.json({ data: allImages });
 	});
 
 export default {
