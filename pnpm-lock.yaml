@@ -148,6 +148,9 @@ importers:
       vite:
         specifier: ^5.4.8
         version: 5.4.9(@types/node@22.7.6)
+      wrangler:
+        specifier: ^3.60.3
+        version: 3.80.5(@cloudflare/workers-types@4.20241011.0)
 
 packages:
 

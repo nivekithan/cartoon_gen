@@ -44,8 +44,11 @@ function App() {
         throw error;
       }
     },
-    onSuccess: () => {
+    onSuccess: (url) => {
       queryClient.invalidateQueries({ queryKey: ["images"] });
+
+      const win = window.open(url, "_blank");
+      win?.focus();
     },
   });
 
