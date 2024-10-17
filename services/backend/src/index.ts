@@ -6,6 +6,8 @@ import { generateObject } from 'ai';
 import Replicate from 'replicate';
 import { FileOutput } from 'replicate';
 import { cors } from 'hono/cors';
+import { getDb } from './db/getDb';
+import { imageTable } from './db/schema';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -47,11 +49,40 @@ app.post('/generate', zValidator('json', GenerateSchema), async (c) => {
 			width: 1024,
 			height: 1024,
 			output_quality: 100,
+			output_format: 'webp',
 		},
 		wait: { mode: 'block' },
 	})) as FileOutput;
 
-	return c.json({ data: imageOutput.url().toString(), debug: { imagePrompt } });
+	const imagePredictionUrl = imageOutput.url().toString();
+
+	console.log({ imagePredictionUrl });
+
+	const response = await fetch(imagePredictionUrl);
+
+	const key = `${crypto.randomUUID()}.webp`;
+
+	console.log(`uploading the file to key`, { key });
+
+	await c.env.CartoonBucket.put(key, response.body, {
+		httpMetadata: { contentType: 'image/webp', contentDisposition: 'inline' },
+	});
+
+	console.log(`Uploaded the file`, { key });
+
+	const url = new URL(key, c.env.CARTOON_IMAGE_BUCKET);
+
+	console.log({ url: url.toString() });
+
+	const db = getDb(c.env.DB);
+
+	console.log(`Saving the key to the database`, { key });
+
+	await db.insert(imageTable).values({ key });
+
+	console.log(`Saved the key to the database`, { key });
+
+	return c.json({ data: url, debug: { imagePrompt } });
 });
 
 export default {
