@@ -25,11 +25,12 @@ app.post('/generate', zValidator('json', GenerateSchema), async (c) => {
 	const output = await generateObject({
 		model,
 		schema: z.object({ imagePrompt: z.string().describe('The image prompt used to describe the cartoon') }),
+		temperature: 1,
 		messages: [
 			{
 				role: 'system',
 				content:
-					'You write image prompts for political cartoons. Cartoon must be simple which you find in the newspaper with text bubble, it should humours and controversial.',
+					'You write image prompts for political cartoons. Cartoon must be simple which you find in the newspaper with text bubble, it should humours and controversial. There should be joke',
 			},
 			{ role: 'user', content: `Generate image prompt for the following text: ${prompt}` },
 		],
