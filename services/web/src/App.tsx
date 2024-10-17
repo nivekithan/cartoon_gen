@@ -54,7 +54,7 @@ function App() {
 
   return (
     <div className="container mx-auto">
-      <div className="min-h-[calc(100vh-320px)] grid place-items-center">
+      <div className="min-h-[calc(100vh-200px)] grid place-items-center">
         <div className="scale-125">
           <Card>
             <CardHeader>
