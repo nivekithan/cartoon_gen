@@ -57,8 +57,9 @@ function App() {
               e.preventDefault();
               generateImage(topicInput);
             }}
+            className="flex flex-col gap-2"
           >
-            <Label>Topic</Label>
+            <Label>Topic:</Label>
             <Input
               type="text"
               value={topicInput}

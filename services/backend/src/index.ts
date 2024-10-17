@@ -29,7 +29,7 @@ app.post('/generate', zValidator('json', GenerateSchema), async (c) => {
 			{
 				role: 'system',
 				content:
-					'You write image prompts for political cartoons. Cartoon must be simple which you find in the newspaper with text bubble, it should humours and it should be conversational.',
+					'You write image prompts for political cartoons. Cartoon must be simple which you find in the newspaper with text bubble, it should humours and controversial.',
 			},
 			{ role: 'user', content: `Generate image prompt for the following text: ${prompt}` },
 		],
@@ -45,7 +45,7 @@ app.post('/generate', zValidator('json', GenerateSchema), async (c) => {
 			prompt_upsampling: true,
 			width: 1024,
 			height: 1024,
-			output_quality: 80,
+			output_quality: 100,
 		},
 		wait: { mode: 'block' },
 	})) as FileOutput;
