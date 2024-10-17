@@ -10,6 +10,7 @@ import { Label } from "./components/ui/label";
 import { Input } from "./components/ui/input";
 import { Button } from "./components/ui/button";
 import { useState } from "react";
+import { hc } from "./lib/hc";
 
 function App() {
   const [topicInput, setTopicInput] = useState("");
@@ -21,15 +22,10 @@ function App() {
   } = useMutation({
     mutationFn: async (topic: string) => {
       try {
-        const backendUrl = import.meta.env.VITE_BACKEND_API_URL;
-        const url = new URL("/generate", backendUrl);
-        const response = await fetch(url.toString(), {
-          method: "POST",
-          body: JSON.stringify({ prompt: topic }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await hc.generate.$post(
+          { json: { prompt: topic } },
+          { headers: { "Content-Type": "application/json" } },
+        );
 
         const body = await response.json();
 

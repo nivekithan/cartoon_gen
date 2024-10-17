@@ -27,5 +27,8 @@
 		"hono": "^4.6.5",
 		"replicate": "^1.0.1",
 		"zod": "^3.23.8"
+	},
+	"exports": {
+		".": "./src/export_rpc_type.ts"
 	}
 }
